@@ -1,0 +1,705 @@
+{
+  "info" : {
+    "name" : "break-glass-access Postman Collection",
+    "description" : "Emergency access management platform for production systems. Provides \ntime-limited, audited, and auto-revoked elevated privileges when normal \naccess paths fail during critical incidents. Every session is fully \nrecorded for compliance and post-incident review.\n\n\nOpenAPI version: 1.0.0",
+    "schema" : "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth" : {
+    "type" : "bearer",
+    "bearer" : [ {
+      "key" : "token",
+      "value" : "{{accessToken}}",
+      "type" : "string"
+    } ]
+  },
+  "variable" : [ {
+    "key" : "baseUrl",
+    "value" : "https://breakglass.forgesphere.lightning.com/v1",
+    "type" : "string",
+    "description" : "Override with the base URL of the deployed Apigee proxy."
+  }, {
+    "key" : "accessToken",
+    "value" : "",
+    "type" : "string"
+  }, {
+    "key" : "requestId",
+    "value" : "",
+    "type" : "string",
+    "description" : "Unique identifier of the access request."
+  }, {
+    "key" : "targetSystem",
+    "value" : "",
+    "type" : "string",
+    "description" : "Filter by target system."
+  }, {
+    "key" : "permissionLevel",
+    "value" : "",
+    "type" : "string",
+    "description" : "Filter by permission level."
+  }, {
+    "key" : "incidentId",
+    "value" : "",
+    "type" : "string",
+    "description" : "Filter by incident reference."
+  }, {
+    "key" : "page",
+    "value" : "",
+    "type" : "string",
+    "description" : "Page number (zero-based)."
+  }, {
+    "key" : "size",
+    "value" : "",
+    "type" : "string",
+    "description" : "Number of items per page."
+  } ],
+  "item" : [ {
+    "name" : "Request emergency break-glass access",
+    "request" : {
+      "method" : "POST",
+      "description" : "Request emergency break-glass access\n\nResponses:\n- 202: Access request accepted and under processing.\n- 400: Invalid request payload or missing required fields.\n- 409: Conflicting active request exists for the same target.\n- 500: Internal server error.",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json",
+        "type" : "text"
+      } ],
+      "body" : {
+        "mode" : "raw",
+        "raw" : "{\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"approverId\":\"ciso@forgesphere.example.com\",\"emergencyReason\":\"Production completely down; no approver reachable within SLA window.\",\"notifyChannels\":[\"SLACK\",\"PAGERDUTY\"]}",
+        "options" : {
+          "raw" : {
+            "language" : "json"
+          }
+        }
+      },
+      "url" : {
+        "raw" : "{{baseUrl}}/access-requests",
+        "host" : [ "{{baseUrl}}" ],
+        "path" : [ "access-requests" ]
+      }
+    },
+    "response" : [ {
+      "name" : "202 Access request accepted and under processing.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Request emergency break-glass access\n\nResponses:\n- 202: Access request accepted and under processing.\n- 400: Invalid request payload or missing required fields.\n- 409: Conflicting active request exists for the same target.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"approverId\":\"ciso@forgesphere.example.com\",\"emergencyReason\":\"Production completely down; no approver reachable within SLA window.\",\"notifyChannels\":[\"SLACK\",\"PAGERDUTY\"]}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests" ]
+        }
+      },
+      "status" : "Access request accepted and under processing.",
+      "code" : 202,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"requestId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"status\":\"ACTIVE\",\"requestedBy\":\"sre.oncall@forgesphere.example.com\",\"requestedAt\":\"2026-01-01T00:00:00Z\",\"approvedBy\":\"ciso@forgesphere.example.com\",\"approvedAt\":\"2026-01-01T00:00:00Z\",\"activatedAt\":\"2026-01-01T00:00:00Z\",\"expiresAt\":\"2026-01-01T00:00:00Z\",\"remainingMinutes\":18,\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"grantedCredentials\":{\"username\":\"bg-sre-9c8f1a3b\",\"accessTokenPrefix\":\"bgt_9c8f1a3b...\",\"certificateExpiry\":\"2026-01-01T00:00:00Z\"},\"sessionRecordingUrl\":\"https://storage.example.com/breakglass/sessions/9c8f1a3b-recording.mp4\",\"commandsExecuted\":42,\"auditReference\":\"audit://breakglass/req-9c8f1a3b\",\"revocationReason\":\"sample\",\"revokedBy\":\"sample\",\"revokedAt\":\"2026-01-01T00:00:00Z\"}"
+    }, {
+      "name" : "400 Invalid request payload or missing required fields.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Request emergency break-glass access\n\nResponses:\n- 202: Access request accepted and under processing.\n- 400: Invalid request payload or missing required fields.\n- 409: Conflicting active request exists for the same target.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"approverId\":\"ciso@forgesphere.example.com\",\"emergencyReason\":\"Production completely down; no approver reachable within SLA window.\",\"notifyChannels\":[\"SLACK\",\"PAGERDUTY\"]}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests" ]
+        }
+      },
+      "status" : "Invalid request payload or missing required fields.",
+      "code" : 400,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "409 Conflicting active request exists for the same target.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Request emergency break-glass access\n\nResponses:\n- 202: Access request accepted and under processing.\n- 400: Invalid request payload or missing required fields.\n- 409: Conflicting active request exists for the same target.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"approverId\":\"ciso@forgesphere.example.com\",\"emergencyReason\":\"Production completely down; no approver reachable within SLA window.\",\"notifyChannels\":[\"SLACK\",\"PAGERDUTY\"]}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests" ]
+        }
+      },
+      "status" : "Conflicting active request exists for the same target.",
+      "code" : 409,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "500 Internal server error.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Request emergency break-glass access\n\nResponses:\n- 202: Access request accepted and under processing.\n- 400: Invalid request payload or missing required fields.\n- 409: Conflicting active request exists for the same target.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"approverId\":\"ciso@forgesphere.example.com\",\"emergencyReason\":\"Production completely down; no approver reachable within SLA window.\",\"notifyChannels\":[\"SLACK\",\"PAGERDUTY\"]}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests" ]
+        }
+      },
+      "status" : "Internal server error.",
+      "code" : 500,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    } ]
+  }, {
+    "name" : "Get the status of an access request",
+    "request" : {
+      "method" : "GET",
+      "description" : "Get the status of an access request\n\nResponses:\n- 200: Current status of the request.\n- 404: Request ID not found.\n- 500: Internal server error.",
+      "header" : [ ],
+      "url" : {
+        "raw" : "{{baseUrl}}/access-requests/:requestId",
+        "host" : [ "{{baseUrl}}" ],
+        "path" : [ "access-requests", ":requestId" ],
+        "variable" : [ {
+          "key" : "requestId",
+          "value" : "00000000-0000-0000-0000-000000000001",
+          "description" : "Unique identifier of the access request."
+        } ]
+      }
+    },
+    "response" : [ {
+      "name" : "200 Current status of the request.",
+      "originalRequest" : {
+        "method" : "GET",
+        "description" : "Get the status of an access request\n\nResponses:\n- 200: Current status of the request.\n- 404: Request ID not found.\n- 500: Internal server error.",
+        "header" : [ ],
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Current status of the request.",
+      "code" : 200,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"requestId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"status\":\"ACTIVE\",\"requestedBy\":\"sre.oncall@forgesphere.example.com\",\"requestedAt\":\"2026-01-01T00:00:00Z\",\"approvedBy\":\"ciso@forgesphere.example.com\",\"approvedAt\":\"2026-01-01T00:00:00Z\",\"activatedAt\":\"2026-01-01T00:00:00Z\",\"expiresAt\":\"2026-01-01T00:00:00Z\",\"remainingMinutes\":18,\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"grantedCredentials\":{\"username\":\"bg-sre-9c8f1a3b\",\"accessTokenPrefix\":\"bgt_9c8f1a3b...\",\"certificateExpiry\":\"2026-01-01T00:00:00Z\"},\"sessionRecordingUrl\":\"https://storage.example.com/breakglass/sessions/9c8f1a3b-recording.mp4\",\"commandsExecuted\":42,\"auditReference\":\"audit://breakglass/req-9c8f1a3b\",\"revocationReason\":\"sample\",\"revokedBy\":\"sample\",\"revokedAt\":\"2026-01-01T00:00:00Z\"}"
+    }, {
+      "name" : "404 Request ID not found.",
+      "originalRequest" : {
+        "method" : "GET",
+        "description" : "Get the status of an access request\n\nResponses:\n- 200: Current status of the request.\n- 404: Request ID not found.\n- 500: Internal server error.",
+        "header" : [ ],
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Request ID not found.",
+      "code" : 404,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "500 Internal server error.",
+      "originalRequest" : {
+        "method" : "GET",
+        "description" : "Get the status of an access request\n\nResponses:\n- 200: Current status of the request.\n- 404: Request ID not found.\n- 500: Internal server error.",
+        "header" : [ ],
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Internal server error.",
+      "code" : 500,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    } ]
+  }, {
+    "name" : "Manually revoke an active break-glass session",
+    "request" : {
+      "method" : "POST",
+      "description" : "Manually revoke an active break-glass session\n\nResponses:\n- 200: Access revoked successfully.\n- 400: Invalid request payload or missing required fields.\n- 404: Request ID not found.\n- 409: Request is not in a revocable state.\n- 500: Internal server error.",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json",
+        "type" : "text"
+      } ],
+      "body" : {
+        "mode" : "raw",
+        "raw" : "{\"reason\":\"Incident resolved; credentials no longer needed.\",\"revokedBy\":\"sre.oncall@forgesphere.example.com\"}",
+        "options" : {
+          "raw" : {
+            "language" : "json"
+          }
+        }
+      },
+      "url" : {
+        "raw" : "{{baseUrl}}/access-requests/:requestId/revoke",
+        "host" : [ "{{baseUrl}}" ],
+        "path" : [ "access-requests", ":requestId", "revoke" ],
+        "variable" : [ {
+          "key" : "requestId",
+          "value" : "00000000-0000-0000-0000-000000000001",
+          "description" : "Unique identifier of the access request."
+        } ]
+      }
+    },
+    "response" : [ {
+      "name" : "200 Access revoked successfully.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Manually revoke an active break-glass session\n\nResponses:\n- 200: Access revoked successfully.\n- 400: Invalid request payload or missing required fields.\n- 404: Request ID not found.\n- 409: Request is not in a revocable state.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"reason\":\"Incident resolved; credentials no longer needed.\",\"revokedBy\":\"sre.oncall@forgesphere.example.com\"}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId/revoke",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId", "revoke" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Access revoked successfully.",
+      "code" : 200,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"requestId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"status\":\"ACTIVE\",\"requestedBy\":\"sre.oncall@forgesphere.example.com\",\"requestedAt\":\"2026-01-01T00:00:00Z\",\"approvedBy\":\"ciso@forgesphere.example.com\",\"approvedAt\":\"2026-01-01T00:00:00Z\",\"activatedAt\":\"2026-01-01T00:00:00Z\",\"expiresAt\":\"2026-01-01T00:00:00Z\",\"remainingMinutes\":18,\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"grantedCredentials\":{\"username\":\"bg-sre-9c8f1a3b\",\"accessTokenPrefix\":\"bgt_9c8f1a3b...\",\"certificateExpiry\":\"2026-01-01T00:00:00Z\"},\"sessionRecordingUrl\":\"https://storage.example.com/breakglass/sessions/9c8f1a3b-recording.mp4\",\"commandsExecuted\":42,\"auditReference\":\"audit://breakglass/req-9c8f1a3b\",\"revocationReason\":\"sample\",\"revokedBy\":\"sample\",\"revokedAt\":\"2026-01-01T00:00:00Z\"}"
+    }, {
+      "name" : "400 Invalid request payload or missing required fields.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Manually revoke an active break-glass session\n\nResponses:\n- 200: Access revoked successfully.\n- 400: Invalid request payload or missing required fields.\n- 404: Request ID not found.\n- 409: Request is not in a revocable state.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"reason\":\"Incident resolved; credentials no longer needed.\",\"revokedBy\":\"sre.oncall@forgesphere.example.com\"}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId/revoke",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId", "revoke" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Invalid request payload or missing required fields.",
+      "code" : 400,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "404 Request ID not found.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Manually revoke an active break-glass session\n\nResponses:\n- 200: Access revoked successfully.\n- 400: Invalid request payload or missing required fields.\n- 404: Request ID not found.\n- 409: Request is not in a revocable state.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"reason\":\"Incident resolved; credentials no longer needed.\",\"revokedBy\":\"sre.oncall@forgesphere.example.com\"}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId/revoke",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId", "revoke" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Request ID not found.",
+      "code" : 404,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "409 Request is not in a revocable state.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Manually revoke an active break-glass session\n\nResponses:\n- 200: Access revoked successfully.\n- 400: Invalid request payload or missing required fields.\n- 404: Request ID not found.\n- 409: Request is not in a revocable state.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"reason\":\"Incident resolved; credentials no longer needed.\",\"revokedBy\":\"sre.oncall@forgesphere.example.com\"}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId/revoke",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId", "revoke" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Request is not in a revocable state.",
+      "code" : 409,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "500 Internal server error.",
+      "originalRequest" : {
+        "method" : "POST",
+        "description" : "Manually revoke an active break-glass session\n\nResponses:\n- 200: Access revoked successfully.\n- 400: Invalid request payload or missing required fields.\n- 404: Request ID not found.\n- 409: Request is not in a revocable state.\n- 500: Internal server error.",
+        "header" : [ {
+          "key" : "Content-Type",
+          "value" : "application/json",
+          "type" : "text"
+        } ],
+        "body" : {
+          "mode" : "raw",
+          "raw" : "{\"reason\":\"Incident resolved; credentials no longer needed.\",\"revokedBy\":\"sre.oncall@forgesphere.example.com\"}",
+          "options" : {
+            "raw" : {
+              "language" : "json"
+            }
+          }
+        },
+        "url" : {
+          "raw" : "{{baseUrl}}/access-requests/:requestId/revoke",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "access-requests", ":requestId", "revoke" ],
+          "variable" : [ {
+            "key" : "requestId",
+            "value" : "00000000-0000-0000-0000-000000000001",
+            "description" : "Unique identifier of the access request."
+          } ]
+        }
+      },
+      "status" : "Internal server error.",
+      "code" : 500,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    } ]
+  }, {
+    "name" : "List all currently active break-glass sessions",
+    "request" : {
+      "method" : "GET",
+      "description" : "List all currently active break-glass sessions\n\nResponses:\n- 200: List of currently active sessions.\n- 400: Invalid request payload or missing required fields.\n- 500: Internal server error.",
+      "header" : [ ],
+      "url" : {
+        "raw" : "{{baseUrl}}/sessions/active?targetSystem={{targetSystem}}&permissionLevel={{permissionLevel}}&incidentId={{incidentId}}&page={{page}}&size={{size}}",
+        "host" : [ "{{baseUrl}}" ],
+        "path" : [ "sessions", "active" ],
+        "query" : [ {
+          "key" : "targetSystem",
+          "value" : "sample",
+          "disabled" : true,
+          "description" : "Filter by target system."
+        }, {
+          "key" : "permissionLevel",
+          "value" : "READ_ONLY",
+          "disabled" : true,
+          "description" : "Filter by permission level."
+        }, {
+          "key" : "incidentId",
+          "value" : "sample-id",
+          "disabled" : true,
+          "description" : "Filter by incident reference."
+        }, {
+          "key" : "page",
+          "value" : "1",
+          "disabled" : true,
+          "description" : "Page number (zero-based)."
+        }, {
+          "key" : "size",
+          "value" : "1",
+          "disabled" : true,
+          "description" : "Number of items per page."
+        } ]
+      }
+    },
+    "response" : [ {
+      "name" : "200 List of currently active sessions.",
+      "originalRequest" : {
+        "method" : "GET",
+        "description" : "List all currently active break-glass sessions\n\nResponses:\n- 200: List of currently active sessions.\n- 400: Invalid request payload or missing required fields.\n- 500: Internal server error.",
+        "header" : [ ],
+        "url" : {
+          "raw" : "{{baseUrl}}/sessions/active?targetSystem={{targetSystem}}&permissionLevel={{permissionLevel}}&incidentId={{incidentId}}&page={{page}}&size={{size}}",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "sessions", "active" ],
+          "query" : [ {
+            "key" : "targetSystem",
+            "value" : "sample",
+            "disabled" : true,
+            "description" : "Filter by target system."
+          }, {
+            "key" : "permissionLevel",
+            "value" : "READ_ONLY",
+            "disabled" : true,
+            "description" : "Filter by permission level."
+          }, {
+            "key" : "incidentId",
+            "value" : "sample-id",
+            "disabled" : true,
+            "description" : "Filter by incident reference."
+          }, {
+            "key" : "page",
+            "value" : "1",
+            "disabled" : true,
+            "description" : "Page number (zero-based)."
+          }, {
+            "key" : "size",
+            "value" : "1",
+            "disabled" : true,
+            "description" : "Number of items per page."
+          } ]
+        }
+      },
+      "status" : "List of currently active sessions.",
+      "code" : 200,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"content\":[{\"requestId\":\"9c8f1a3b-6d7e-4a12-8f5e-123456789abc\",\"targetSystem\":\"payment-db-prod\",\"permissionLevel\":\"ADMIN\",\"status\":\"ACTIVE\",\"requestedBy\":\"sre.oncall@forgesphere.example.com\",\"requestedAt\":\"2026-01-01T00:00:00Z\",\"approvedBy\":\"ciso@forgesphere.example.com\",\"approvedAt\":\"2026-01-01T00:00:00Z\",\"activatedAt\":\"2026-01-01T00:00:00Z\",\"expiresAt\":\"2026-01-01T00:00:00Z\",\"remainingMinutes\":18,\"durationMinutes\":30,\"incidentId\":\"INC-2050\",\"justification\":\"Primary DBA unavailable; need to promote read replica during outage.\",\"approvalMode\":\"REQUIRE_APPROVER\",\"grantedCredentials\":{\"username\":\"bg-sre-9c8f1a3b\",\"accessTokenPrefix\":\"bgt_9c8f1a3b...\",\"certificateExpiry\":\"2026-01-01T00:00:00Z\"},\"sessionRecordingUrl\":\"https://storage.example.com/breakglass/sessions/9c8f1a3b-recording.mp4\",\"commandsExecuted\":42,\"auditReference\":\"audit://breakglass/req-9c8f1a3b\",\"revocationReason\":\"sample\",\"revokedBy\":\"sample\",\"revokedAt\":\"2026-01-01T00:00:00Z\"}],\"totalElements\":4,\"totalPages\":1,\"page\":0,\"size\":20,\"summary\":{\"totalActiveSessions\":4,\"highestPermissionLevel\":\"ROOT\",\"oldestSessionMinutes\":87}}"
+    }, {
+      "name" : "400 Invalid request payload or missing required fields.",
+      "originalRequest" : {
+        "method" : "GET",
+        "description" : "List all currently active break-glass sessions\n\nResponses:\n- 200: List of currently active sessions.\n- 400: Invalid request payload or missing required fields.\n- 500: Internal server error.",
+        "header" : [ ],
+        "url" : {
+          "raw" : "{{baseUrl}}/sessions/active?targetSystem={{targetSystem}}&permissionLevel={{permissionLevel}}&incidentId={{incidentId}}&page={{page}}&size={{size}}",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "sessions", "active" ],
+          "query" : [ {
+            "key" : "targetSystem",
+            "value" : "sample",
+            "disabled" : true,
+            "description" : "Filter by target system."
+          }, {
+            "key" : "permissionLevel",
+            "value" : "READ_ONLY",
+            "disabled" : true,
+            "description" : "Filter by permission level."
+          }, {
+            "key" : "incidentId",
+            "value" : "sample-id",
+            "disabled" : true,
+            "description" : "Filter by incident reference."
+          }, {
+            "key" : "page",
+            "value" : "1",
+            "disabled" : true,
+            "description" : "Page number (zero-based)."
+          }, {
+            "key" : "size",
+            "value" : "1",
+            "disabled" : true,
+            "description" : "Number of items per page."
+          } ]
+        }
+      },
+      "status" : "Invalid request payload or missing required fields.",
+      "code" : 400,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    }, {
+      "name" : "500 Internal server error.",
+      "originalRequest" : {
+        "method" : "GET",
+        "description" : "List all currently active break-glass sessions\n\nResponses:\n- 200: List of currently active sessions.\n- 400: Invalid request payload or missing required fields.\n- 500: Internal server error.",
+        "header" : [ ],
+        "url" : {
+          "raw" : "{{baseUrl}}/sessions/active?targetSystem={{targetSystem}}&permissionLevel={{permissionLevel}}&incidentId={{incidentId}}&page={{page}}&size={{size}}",
+          "host" : [ "{{baseUrl}}" ],
+          "path" : [ "sessions", "active" ],
+          "query" : [ {
+            "key" : "targetSystem",
+            "value" : "sample",
+            "disabled" : true,
+            "description" : "Filter by target system."
+          }, {
+            "key" : "permissionLevel",
+            "value" : "READ_ONLY",
+            "disabled" : true,
+            "description" : "Filter by permission level."
+          }, {
+            "key" : "incidentId",
+            "value" : "sample-id",
+            "disabled" : true,
+            "description" : "Filter by incident reference."
+          }, {
+            "key" : "page",
+            "value" : "1",
+            "disabled" : true,
+            "description" : "Page number (zero-based)."
+          }, {
+            "key" : "size",
+            "value" : "1",
+            "disabled" : true,
+            "description" : "Number of items per page."
+          } ]
+        }
+      },
+      "status" : "Internal server error.",
+      "code" : 500,
+      "_postman_previewlanguage" : "json",
+      "header" : [ {
+        "key" : "Content-Type",
+        "value" : "application/json"
+      } ],
+      "body" : "{\"status\":409,\"errorCode\":\"REQUEST_ALREADY_ACTIVE\",\"message\":\"An active break-glass session already exists for payment-db-prod.\",\"timestamp\":\"2026-01-01T00:00:00Z\",\"path\":\"/v1/access-requests\",\"serviceTransactionId\":\"523f52b2-64a5-465e-b245-3efbe78f70ae\"}"
+    } ]
+  } ]
+}
